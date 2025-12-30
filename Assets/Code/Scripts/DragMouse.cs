@@ -1,11 +1,13 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class DragBox : MonoBehaviour
+public class DragBox : MonoBehaviour, IDragHandler
 {
     private Vector2 startPosition;
     private Vector2 endPosition;
     private bool isSelecting = false;
-    private float dragThreshold = 5f; // 드래그 감지 최소 거리
+    private float dragThreshold = 5f;   // 드래그 감지 최소 거리
+    private float distance = 10f;       // 거리
 
     void OnGUI()
     {
@@ -21,7 +23,20 @@ public class DragBox : MonoBehaviour
         }
     }
 
+    // 드래그 이벤트 함수
+    public void OnDrag(PointerEventData eventData)
+    {
+        Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, distance);
+        transform.position = mousePos;
+    }
+
     void Update()
+    {
+        DrawDragUI();
+    }
+
+    // 마우스 드래그 UI 그리기
+    void DrawDragUI()
     {
         // 마우스 왼쪽 버튼을 눌렀을 때
         if (Input.GetMouseButtonDown(0))
@@ -60,4 +75,5 @@ public class DragBox : MonoBehaviour
 
         return Rect.MinMaxRect(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
     }
+
 }
